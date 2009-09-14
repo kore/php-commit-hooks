@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This is an example for a common pre commit configuration. It registers a
+ * single check, which validates the commit messages, and echos the result to
+ * the CLI, so the report will end in the users SVN client.
+ */
+
+require dirname( __FILE__ ) . '/environment.php';
+
+$runner = new pchRunner();
+// $runner->register( new pchLintCheck( $runner ) );
+$runner->register( new pchCommitMessageCheck( $runner, array(
+    'Refs'        => pchCommitMessageCheck::REQUIRED,
+    'Fixed'       => pchCommitMessageCheck::REQUIRED,
+    'Closed'      => pchCommitMessageCheck::REQUIRED,
+    'Implemented' => pchCommitMessageCheck::OPTIONAL,
+    'Documented'  => pchCommitMessageCheck::OPTIONAL,
+    'Tested'      => pchCommitMessageCheck::PROHIBITED,
+) );
+// $runner->register( new pchCodeSnifferCheck( $runner ) );
+
+$runner->setReporter( new pchCliReporter() );
+
+$runner->run();
+
+?>

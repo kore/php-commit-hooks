@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This is an example for a common post commit configuration. It registers a
+ * single check, the code sniffer check, and sends the report to the user, who
+ * committed.
+ */
+
+require dirname( __FILE__ ) . '/environment.php';
+
+$runner = new pchRunner();
+$runner->register( new pchCodeSnifferCheck( $runner, 'arbit' ) );
+
+$runner->setReporter( new pchMailReporter(
+    'postcommit@arbitracker.org', // Sender
+    '{user}@arbitracker.org', // Receiver
+    'Coding style violations' // Mail topic
+) );
+
+$runner->run();
+
+?>
