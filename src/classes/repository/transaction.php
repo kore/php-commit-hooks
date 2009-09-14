@@ -60,5 +60,21 @@ class pchRepositoryTransaction extends pchRepository
         parent::__construct( $repository );
         $this->transaction = (string) $transaction;
     }
+
+    /**
+     * Svnlook options
+     *
+     * Return the svnlook CLI options, to execute a query using the svnlook 
+     * tool on the specified repository.
+     * 
+     * @return string
+     */
+    public function svnLookOptions()
+    {
+        return sprintf( '-t "%s" "%s"',
+            escapeshellarg( $this->transaction ),
+            escapeshellarg( $this->path )
+        );
+    }
 }
 

@@ -9,16 +9,17 @@
 require dirname( __FILE__ ) . '/environment.php';
 
 $runner = new pchRunner();
-// $runner->register( new pchLintCheck( $runner ) );
-$runner->register( new pchCommitMessageCheck( $runner, array(
+// $runner->register( new pchLintCheck() );
+$runner->register( new pchCommitMessageCheck( array(
     'Refs'        => pchCommitMessageCheck::REQUIRED,
     'Fixed'       => pchCommitMessageCheck::REQUIRED,
     'Closed'      => pchCommitMessageCheck::REQUIRED,
     'Implemented' => pchCommitMessageCheck::OPTIONAL,
     'Documented'  => pchCommitMessageCheck::OPTIONAL,
     'Tested'      => pchCommitMessageCheck::PROHIBITED,
+    'Added'       => pchCommitMessageCheck::PROHIBITED,
 ) ) );
-// $runner->register( new pchCodeSnifferCheck( $runner ) );
+// $runner->register( new pchCodeSnifferCheck() );
 
 $runner->setReporter( new pchCliReporter() );
 

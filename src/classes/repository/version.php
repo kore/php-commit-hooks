@@ -60,5 +60,21 @@ class pchRepositoryVersion extends pchRepository
         parent::__construct( $repository );
         $this->version = (string) $version;
     }
+
+    /**
+     * Svnlook options
+     *
+     * Return the svnlook CLI options, to execute a query using the svnlook 
+     * tool on the specified repository.
+     * 
+     * @return string
+     */
+    public function svnLookOptions()
+    {
+        return sprintf( '-v "%s" "%s"',
+            escapeshellarg( $this->version ),
+            escapeshellarg( $this->path )
+        );
+    }
 }
 

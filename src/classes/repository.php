@@ -58,5 +58,15 @@ abstract class pchRepository
     {
         $this->path = (string) $repository;
     }
+
+    /**
+     * Svnlook options
+     *
+     * Return the svnlook CLI options, to execute a query using the svnlook 
+     * tool on the specified repository.
+     * 
+     * @return string
+     */
+    abstract public function svnLookOptions();
 }
 
