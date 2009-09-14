@@ -33,92 +33,75 @@
  */
 
 /**
- * Runner 
+ * Reporter 
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchRunner
+class pchMailReporter extends pchReporter
 {
     /**
-     * List of checks registered in the runner and executed by the runner.
+     * Configured mail sender
      * 
-     * @var array
+     * @var string
      */
-    protected $checks;
+    protected $sender;
 
     /**
-     * Reporter used to report issues found by the checks.
+     * Configured mail receiver
      * 
-     * @var pchReported
+     * @var string
      */
-    protected $reporter;
+    protected $receiver;
 
     /**
-     * Constructor for pchRunner
+     * Configured mail subject
+     * 
+     * @var string
+     */
+    protected $subject;
+
+    /**
+     * Construct mail reporter from confuguration.
      *
-     * Initilizes instance properties.
+     * Construct mail reporter from mail sending configuration. It receives 
+     * three parameters, while in each simple patterns will be replaced during 
+     * sending. The parameters are the mail sender, the mail receiver and the 
+     * mail subject.
+     *
+     * The following strings inside the parameters will be replaced:
+     * - {user} with the name of the comitter.
      * 
+     * @param string $sender 
+     * @param string $receiver 
+     * @param string $subject 
      * @return void
      */
-    public function __construct()
+    public function __construct( $sender, $receiver, $subject )
     {
-        $this->reporter = new pchCliReporter();
-        $this->checks   = array();
+        $this->sender   = (string) $sender;
+        $this->receiver = (string) $receiver;
+        $this->subject  = (string) $subject;
     }
 
     /**
-     * Register a check
+     * Report occured issues
      *
-     * Register a check, which will be executed by the runner. Each check will 
-     * be called in the order they are registerd.
+     * Will send a mail with the issues to report to the user specified in the 
+     * constructor. Relies on a working PHP mail() function.
      * 
-     * @param pchCheck $check 
+     * @param array $issues
      * @return void
      */
-    public function register( pchCheck $check )
+    public function report( array $issues ) 
     {
-        $this->checks[] = $check;
-    }
-
-    /**
-     * Set reporter
-     *
-     * Set the reporter used to report the issues found by the registered 
-     * checks.
-     * 
-     * @param pchReporter $reporter 
-     * @return void
-     */
-    public function setReporter( pchReporter $reporter )
-    {
-        $this->reporter = $reporter;
-    }
-
-    /**
-     * Run all checks and report them
-     *
-     * Runs all registered checks, aggregates their found issues and passes 
-     * them to the reporter, so the user will be notified in the configured 
-     * way.
-     * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return void
-     */
-    public function run( $repository, $transaction )
-    {
-        $issues = array();
-        foreach ( $checks as $check )
+        if ( !count( $issues ) )
         {
-            $issues = array_merge(
-                $issues,
-                $check->validate( $repository, $transaction )
-            );
+            return;
         }
 
-        $this->reporter->report( $issues );
+        // @TODO: Mail issues
     }
 }
 

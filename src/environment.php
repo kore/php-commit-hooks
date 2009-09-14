@@ -8,5 +8,6 @@ require './classes/reporter/mail.php';
 
 require './classes/check.php';
 require './classes/check/commit_message.php';
+require './classes/check/code_sniffer.php';
 
 ?>

@@ -33,92 +33,35 @@
  */
 
 /**
- * Runner 
+ * Reporter 
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchRunner
+class pchCliReporter extends pchReporter
 {
     /**
-     * List of checks registered in the runner and executed by the runner.
-     * 
-     * @var array
-     */
-    protected $checks;
-
-    /**
-     * Reporter used to report issues found by the checks.
-     * 
-     * @var pchReported
-     */
-    protected $reporter;
-
-    /**
-     * Constructor for pchRunner
+     * Report occured issues
      *
-     * Initilizes instance properties.
+     * Report occured issues, passed as an array to the command line. Will exit 
+     * with a non-zero exit code if any "errors" occured, and with a zero exit 
+     * code, of no issues occured.
+     *
+     * Will always abort script execution.
      * 
+     * @param array $issues
      * @return void
      */
-    public function __construct()
+    public function report( array $issues ) 
     {
-        $this->reporter = new pchCliReporter();
-        $this->checks   = array();
-    }
-
-    /**
-     * Register a check
-     *
-     * Register a check, which will be executed by the runner. Each check will 
-     * be called in the order they are registerd.
-     * 
-     * @param pchCheck $check 
-     * @return void
-     */
-    public function register( pchCheck $check )
-    {
-        $this->checks[] = $check;
-    }
-
-    /**
-     * Set reporter
-     *
-     * Set the reporter used to report the issues found by the registered 
-     * checks.
-     * 
-     * @param pchReporter $reporter 
-     * @return void
-     */
-    public function setReporter( pchReporter $reporter )
-    {
-        $this->reporter = $reporter;
-    }
-
-    /**
-     * Run all checks and report them
-     *
-     * Runs all registered checks, aggregates their found issues and passes 
-     * them to the reporter, so the user will be notified in the configured 
-     * way.
-     * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return void
-     */
-    public function run( $repository, $transaction )
-    {
-        $issues = array();
-        foreach ( $checks as $check )
+        if ( !count( $issues ) )
         {
-            $issues = array_merge(
-                $issues,
-                $check->validate( $repository, $transaction )
-            );
+            exit( 0 );
         }
 
-        $this->reporter->report( $issues );
+        // @TODO: Print issues
+        exit( 1 );
     }
 }
 

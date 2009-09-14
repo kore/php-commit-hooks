@@ -33,92 +33,28 @@
  */
 
 /**
- * Runner 
+ * Check 
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchRunner
+class pchCommitMessageCheck extends pchCheck
 {
     /**
-     * List of checks registered in the runner and executed by the runner.
-     * 
-     * @var array
-     */
-    protected $checks;
-
-    /**
-     * Reporter used to report issues found by the checks.
-     * 
-     * @var pchReported
-     */
-    protected $reporter;
-
-    /**
-     * Constructor for pchRunner
+     * Validate the current check
      *
-     * Initilizes instance properties.
-     * 
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->reporter = new pchCliReporter();
-        $this->checks   = array();
-    }
-
-    /**
-     * Register a check
-     *
-     * Register a check, which will be executed by the runner. Each check will 
-     * be called in the order they are registerd.
-     * 
-     * @param pchCheck $check 
-     * @return void
-     */
-    public function register( pchCheck $check )
-    {
-        $this->checks[] = $check;
-    }
-
-    /**
-     * Set reporter
-     *
-     * Set the reporter used to report the issues found by the registered 
-     * checks.
-     * 
-     * @param pchReporter $reporter 
-     * @return void
-     */
-    public function setReporter( pchReporter $reporter )
-    {
-        $this->reporter = $reporter;
-    }
-
-    /**
-     * Run all checks and report them
-     *
-     * Runs all registered checks, aggregates their found issues and passes 
-     * them to the reporter, so the user will be notified in the configured 
-     * way.
+     * Validate the check on the specified repository. Returns an array of 
+     * found issues.
      * 
      * @param string $repository 
      * @param string $transaction 
-     * @return void
+     * @return array
      */
-    public function run( $repository, $transaction )
+    public function validate( $repository, $transaction )
     {
-        $issues = array();
-        foreach ( $checks as $check )
-        {
-            $issues = array_merge(
-                $issues,
-                $check->validate( $repository, $transaction )
-            );
-        }
-
-        $this->reporter->report( $issues );
+        // @TODO: Implement.
+        return array();
     }
 }
 

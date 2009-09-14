@@ -17,7 +17,7 @@ $runner->register( new pchCommitMessageCheck( $runner, array(
     'Implemented' => pchCommitMessageCheck::OPTIONAL,
     'Documented'  => pchCommitMessageCheck::OPTIONAL,
     'Tested'      => pchCommitMessageCheck::PROHIBITED,
-) );
+) ) );
 // $runner->register( new pchCodeSnifferCheck( $runner ) );
 
 $runner->setReporter( new pchCliReporter() );
