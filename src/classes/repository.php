@@ -33,27 +33,30 @@
  */
 
 /**
- * Check 
+ * Struct class identifying the affected repository
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchCommitMessageCheck extends pchCheck
+abstract class pchRepository
 {
     /**
-     * Validate the current check
-     *
-     * Validate the check on the specified repository. Returns an array of 
-     * found issues.
+     * Path to affected repository
      * 
-     * @param pchRepository $repository 
+     * @var string
+     */
+    public $path;
+
+    /**
+     * Construct from repository path
+     * 
+     * @param string $repository 
      * @return void
      */
-    public function validate( pchRepository $repository )
+    public function __construct( $repository )
     {
-        // @TODO: Implement.
-        return array();
+        $this->path = (string) $repository;
     }
 }
 

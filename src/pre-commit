@@ -22,6 +22,6 @@ $runner->register( new pchCommitMessageCheck( $runner, array(
 
 $runner->setReporter( new pchCliReporter() );
 
-$runner->run();
+$runner->run( new pchRepositoryTransaction( $argv[1], $argv[2] ) );
 
 ?>

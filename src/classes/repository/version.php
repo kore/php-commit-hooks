@@ -33,27 +33,32 @@
  */
 
 /**
- * Check 
+ * Struct class identifying the affected repository in a version (post-commit)
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchCommitMessageCheck extends pchCheck
+class pchRepositoryVersion extends pchRepository
 {
     /**
-     * Validate the current check
-     *
-     * Validate the check on the specified repository. Returns an array of 
-     * found issues.
+     * Currently affected version in the repository
      * 
-     * @param pchRepository $repository 
+     * @var string
+     */
+    public $version;
+
+    /**
+     * Construct from repository path, and version
+     * 
+     * @param string $repository 
+     * @param string $version 
      * @return void
      */
-    public function validate( pchRepository $repository )
+    public function __construct( $repository, $version )
     {
-        // @TODO: Implement.
-        return array();
+        parent::__construct( $repository );
+        $this->version = (string) $version;
     }
 }
 

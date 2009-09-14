@@ -103,18 +103,17 @@ class pchRunner
      * them to the reporter, so the user will be notified in the configured 
      * way.
      * 
-     * @param string $repository 
-     * @param string $transaction 
+     * @param pchRepository $repository 
      * @return void
      */
-    public function run( $repository, $transaction )
+    public function run( pchRepository $repository )
     {
         $issues = array();
-        foreach ( $checks as $check )
+        foreach ( $this->checks as $check )
         {
             $issues = array_merge(
                 $issues,
-                $check->validate( $repository, $transaction )
+                $check->validate( $repository )
             );
         }
 

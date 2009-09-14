@@ -17,6 +17,6 @@ $runner->setReporter( new pchMailReporter(
     'Coding style violations' // Mail topic
 ) );
 
-$runner->run();
+$runner->run( new pchRepositoryVersion( $argv[1], $argv[2] ) );
 
 ?>

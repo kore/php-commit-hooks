@@ -33,27 +33,61 @@
  */
 
 /**
- * Check 
+ * Struct class identifying the affected repository in a transaction (pre-commit)
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchCommitMessageCheck extends pchCheck
+class pchIssue
 {
     /**
-     * Validate the current check
-     *
-     * Validate the check on the specified repository. Returns an array of 
-     * found issues.
+     * Importance level of issue, should be one of:
+     * - E_STRICT
+     * - E_NOTICE
+     * - E_WARNING
+     * - E_ERROR
      * 
-     * @param pchRepository $repository 
+     * @var int
+     */
+    public $type;
+
+    /**
+     * File, which the message has been generated for
+     * 
+     * @var string
+     */
+    public $file;
+
+    /**
+     * Line, or line range, which the message has been generated for
+     * 
+     * @var string
+     */
+    public $line;
+
+    /**
+     * Actual message, describing the occured issue.
+     * 
+     * @var string
+     */
+    public $message;
+
+    /**
+     * Construct issue from issue properties.
+     * 
+     * @param int $type 
+     * @param string $file 
+     * @param string $line 
+     * @param string $message 
      * @return void
      */
-    public function validate( pchRepository $repository )
+    public function __construct( $type, $file, $line, $message )
     {
-        // @TODO: Implement.
-        return array();
+        $this->type    = (int) $type;
+        $this->file    = (string) $file;
+        $this->line    = (string) $line;
+        $this->message = (string) $message;
     }
 }
 

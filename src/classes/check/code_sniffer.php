@@ -47,11 +47,10 @@ class pchCodeSnifferCheck extends pchCheck
      * Validate the check on the specified repository. Returns an array of 
      * found issues.
      * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return array
+     * @param pchRepository $repository 
+     * @return void
      */
-    public function validate( $repository, $transaction )
+    public function validate( pchRepository $repository )
     {
         // @TODO: Implement.
         return array();

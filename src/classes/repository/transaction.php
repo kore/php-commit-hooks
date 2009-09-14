@@ -33,27 +33,32 @@
  */
 
 /**
- * Check 
+ * Struct class identifying the affected repository in a transaction (pre-commit)
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchCommitMessageCheck extends pchCheck
+class pchRepositoryTransaction extends pchRepository
 {
     /**
-     * Validate the current check
-     *
-     * Validate the check on the specified repository. Returns an array of 
-     * found issues.
+     * Currently affected transaction in the repository
      * 
-     * @param pchRepository $repository 
+     * @var string
+     */
+    public $transaction;
+
+    /**
+     * Construct from repository path, and transaction
+     * 
+     * @param string $repository 
+     * @param string $transaction 
      * @return void
      */
-    public function validate( pchRepository $repository )
+    public function __construct( $repository, $transaction )
     {
-        // @TODO: Implement.
-        return array();
+        parent::__construct( $repository );
+        $this->transaction = (string) $transaction;
     }
 }
 
