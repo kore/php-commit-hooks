@@ -415,5 +415,67 @@ class pchCommitMessageParserTests extends PHPUnit_Framework_TestCase
             $parser->getResult()
         );
     }
+
+    public static function getCustomCommitMessages()
+    {
+        return array(
+            array(
+                "- Done #23: This was a hard one!",
+                array( array(
+                    'type' => 'Done',
+                    'bug'  => '23',
+                    'text' => 'This was a hard one!',
+                ) ),
+            ),
+            array(
+                "- Tested #23: This was a hard one!",
+                array( array(
+                    'type' => 'Tested',
+                    'bug'  => '23',
+                    'text' => 'This was a hard one!',
+                ) ),
+            ),
+            array(
+                "- Tested: And dumdideldi!\n",
+                array( array(
+                    'type' => 'Tested',
+                    'bug'  => null,
+                    'text' => 'And dumdideldi!',
+                ) ),
+            ),
+            array(
+                "- Fixed: And dumdideldi!\n",
+                array( array(
+                    'type' => 'Fixed',
+                    'bug'  => null,
+                    'text' => 'And dumdideldi!',
+                ) ),
+            ),
+        );
+    }
+
+    /**
+     * Test valid commit messages from data provider
+     * 
+     * @dataProvider getCustomCommitMessages
+     */
+    public function testValidCustomCommitMessages( $message, $expectation )
+    {
+        $parser = new pchCommitMessageCheck( array(
+            'Done'   => pchCommitMessageCheck::REQUIRED,
+            'Tested' => pchCommitMessageCheck::OPTIONAL,
+            'Fixed'  => pchCommitMessageCheck::PROHIBITED,
+        ) );
+
+        $this->assertEquals(
+            array(),
+            $parser->parse( $message )
+        );
+
+        $this->assertEquals(
+            $expectation,
+            $parser->getResult()
+        );
+    }
 }
 
