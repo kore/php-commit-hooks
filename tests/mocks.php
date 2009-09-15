@@ -32,43 +32,63 @@
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
 
-// Set up environment, if this test suite is run independant from the main test
-// suite.
-require __DIR__ . '/test_environment.php';
-
-/*
- * Require test suites.
- */
-require 'base_suite.php';
-require 'commit_message_suite.php';
-
 /**
-* Test suite for Web Content Viewer
-*/
-class pchTestSuite extends PHPUnit_Framework_TestSuite
+ * Mocked reporter
+ *
+ * @package php-commit-hooks
+ * @version $Revision$
+ * @license http://ez.no/licenses/new_bsd New BSD License
+ */
+class pchMockReporter extends pchReporter
 {
+    public $issues;
+
     /**
-     * Basic constructor for test suite
+     * Report occured issues
+     *
+     * Report occured issues, passed as an array.
      * 
+     * @param array $issues
      * @return void
      */
-    public function __construct()
+    public function report( array $issues )
     {
-        parent::__construct();
-        $this->setName( 'php-commit-hooks' );
+        $this->issues = $issues;
+    }
+}
 
-        $this->addTestSuite( pchBaseTestSuite::suite() );
-        $this->addTestSuite( pchCommitMessageTestSuite::suite() );
+/**
+ * Mocked check
+ *
+ * @package php-commit-hooks
+ * @version $Revision$
+ * @license http://ez.no/licenses/new_bsd New BSD License
+ */
+class pchMockCheck extends pchCheck
+{
+    protected $number = 1;
+
+    protected $name;
+
+    public function __construct( $name = 'default' )
+    {
+        $this->name = $name;
     }
 
     /**
-     * Return test suite
+     * Validate the current check
+     *
+     * Validate the check on the specified repository. Returns an array of 
+     * found issues.
      * 
-     * @return PHPUnit_Framework_TestSuite
+     * @param pchRepository $repository 
+     * @return void
      */
-    public static function suite()
+    public function validate( pchRepository $repository )
     {
-        return new pchTestSuite( __CLASS__ );
+        return array(
+            new pchIssue( E_ERROR, null, null, $this->name . $this->number++ )
+        );
     }
 }
 

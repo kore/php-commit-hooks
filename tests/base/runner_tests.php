@@ -32,43 +32,53 @@
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
 
-// Set up environment, if this test suite is run independant from the main test
-// suite.
-require __DIR__ . '/test_environment.php';
-
-/*
- * Require test suites.
- */
-require 'base_suite.php';
-require 'commit_message_suite.php';
-
 /**
-* Test suite for Web Content Viewer
-*/
-class pchTestSuite extends PHPUnit_Framework_TestSuite
+ * Tests for the commit message parser
+ */
+class pchBaseRunnerTests extends PHPUnit_Framework_TestCase
 {
     /**
-     * Basic constructor for test suite
-     * 
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( 'php-commit-hooks' );
-
-        $this->addTestSuite( pchBaseTestSuite::suite() );
-        $this->addTestSuite( pchCommitMessageTestSuite::suite() );
-    }
-
-    /**
      * Return test suite
-     * 
+     *
      * @return PHPUnit_Framework_TestSuite
      */
-    public static function suite()
+	public static function suite()
+	{
+		return new PHPUnit_Framework_TestSuite( __CLASS__ );
+	}
+
+    public function testSingleCheck()
     {
-        return new pchTestSuite( __CLASS__ );
+        $runner = new pchRunner();
+        $runner->setReporter( $reporter = new pchMockReporter() );
+        $runner->register( new pchMockCheck() );
+
+        $runner->run( new pchRepositoryVersion( null, null ) );
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_ERROR, null, null, 'default1' ),
+            ),
+            $reporter->issues
+        );
+    }
+
+    public function testMultipleChecks()
+    {
+        $runner = new pchRunner();
+        $runner->setReporter( $reporter = new pchMockReporter() );
+        $runner->register( new pchMockCheck() );
+        $runner->register( new pchMockCheck() );
+
+        $runner->run( new pchRepositoryVersion( null, null ) );
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_ERROR, null, null, 'default1' ),
+                new pchIssue( E_ERROR, null, null, 'default1' ),
+            ),
+            $reporter->issues
+        );
     }
 }
 

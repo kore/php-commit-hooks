@@ -34,18 +34,20 @@
 
 // Set up environment, if this test suite is run independant from the main test
 // suite.
-require __DIR__ . '/test_environment.php';
-
-/*
- * Require test suites.
- */
-require 'base_suite.php';
-require 'commit_message_suite.php';
+if ( !defined( 'PHC_STARTED' ) )
+{
+    require __DIR__ . '/test_environment.php';
+}
 
 /**
-* Test suite for Web Content Viewer
-*/
-class pchTestSuite extends PHPUnit_Framework_TestSuite
+ * Commit message parser tests
+ */
+require 'base/runner_tests.php';
+
+/**
+ * Test suite for pch
+ */
+class pchBaseTestSuite extends PHPUnit_Framework_TestSuite
 {
     /**
      * Basic constructor for test suite
@@ -55,10 +57,9 @@ class pchTestSuite extends PHPUnit_Framework_TestSuite
     public function __construct()
     {
         parent::__construct();
-        $this->setName( 'php-commit-hooks' );
+        $this->setName( 'php-commit-hooks - base tests' );
 
-        $this->addTestSuite( pchBaseTestSuite::suite() );
-        $this->addTestSuite( pchCommitMessageTestSuite::suite() );
+        $this->addTest( pchBaseRunnerTests::suite() );
     }
 
     /**
@@ -68,7 +69,6 @@ class pchTestSuite extends PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        return new pchTestSuite( __CLASS__ );
+        return new pchBaseTestSuite( __CLASS__ );
     }
 }
-

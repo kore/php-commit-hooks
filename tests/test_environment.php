@@ -7,6 +7,9 @@ date_default_timezone_set( 'UTC' );
 
 require __DIR__ . '/../src/environment.php';
 
+// Require special test classes
+require __DIR__ . '/mocks.php';
+
 /**
  * Fix error reporting settings for test runs
  */
