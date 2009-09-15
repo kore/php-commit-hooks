@@ -43,6 +43,7 @@ if ( !defined( 'PHC_STARTED' ) )
  * Commit message parser tests
  */
 require 'commit_message/parser_tests.php';
+require 'commit_message/check_tests.php';
 
 /**
  * Test suite for pch
@@ -60,6 +61,7 @@ class pchCommitMessageTestSuite extends PHPUnit_Framework_TestSuite
         $this->setName( 'php-commit-hooks - commit message parser' );
 
         $this->addTest( pchCommitMessageParserTests::suite() );
+        $this->addTest( pchCommitMessageCheckTests::suite() );
     }
 
     /**

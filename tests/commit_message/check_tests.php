@@ -33,40 +33,58 @@
  */
 
 /**
- * Struct class identifying the affected repository
- * 
- * @package php-commit-hooks
- * @version $Revision$
- * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
+ * Tests for the commit message parser
  */
-abstract class pchRepository
+class pchCommitMessageCheckTests extends PHPUnit_Framework_TestCase
 {
     /**
-     * Path to affected repository
-     * 
-     * @var string
+     * Return test suite
+     *
+     * @return PHPUnit_Framework_TestSuite
      */
-    public $path;
+	public static function suite()
+	{
+		return new PHPUnit_Framework_TestSuite( __CLASS__ );
+	}
 
-    /**
-     * Construct from repository path
-     * 
-     * @param string $repository 
-     * @return void
-     */
-    public function __construct( $repository )
+    public function testValidCommitMessages()
     {
-        $this->path = (string) $repository;
+        $parser = new pchCommitMessageCheck();
+
+        $this->assertEquals(
+            array(),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 1 ) )
+        );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'type' => 'Added',
+                    'bug'  => null,
+                    'text' => 'A single test file to the test repository',
+                ),
+            ),
+            $parser->getResult()
+        );
     }
 
-    /**
-     * Svnlook command
-     *
-     * Builds a svnlook command from the specified command, using the 
-     * parameters for the specified repository (type).
-     * 
-     * @return string
-     */
-    abstract public function buildSvnLookCommand( $command );
+    public function testInvalidCustomCommitMessages()
+    {
+        $parser = new pchCommitMessageCheck( array(
+            'Done'   => pchCommitMessageCheck::REQUIRED,
+        ) );
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_ERROR, null, null, 'Invalid commit message: "- Added: A single test file to..."' ),
+            ),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 1 ) )
+        );
+
+        $this->assertEquals(
+            null,
+            $parser->getResult()
+        );
+    }
 }
 

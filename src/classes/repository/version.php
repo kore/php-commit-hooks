@@ -62,17 +62,18 @@ class pchRepositoryVersion extends pchRepository
     }
 
     /**
-     * Svnlook options
+     * Svnlook command
      *
-     * Return the svnlook CLI options, to execute a query using the svnlook 
-     * tool on the specified repository.
+     * Builds a svnlook command from the specified command, using the 
+     * parameters for the specified repository (type).
      * 
      * @return string
      */
-    public function svnLookOptions()
+    public function buildSvnLookCommand( $command )
     {
-        return sprintf( '-v "%s" "%s"',
+        return sprintf( '/usr/bin/env svnlook -r %s %s %s',
             escapeshellarg( $this->version ),
+            escapeshellarg( $command ),
             escapeshellarg( $this->path )
         );
     }
