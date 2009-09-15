@@ -184,6 +184,8 @@ class pchCommitMessageCheck extends pchCheck
         'Implemented' => self::OPTIONAL,
         'Documented'  => self::OPTIONAL,
         'Tested'      => self::PROHIBITED,
+        'Translated'  => self::PROHIBITED,
+        'Added'       => self::PROHIBITED,
     );
 
     /**

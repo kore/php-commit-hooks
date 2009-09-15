@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+// List of special test modules.
+$modules = array(
+	'commit' => array( 'phcCommitMessageTestSuite', 'tests/commit_message_suite.php' ),
+);
+
+// Check if the test should only be run for a specified module.
+if ( isset( $modules[end( $argv )] ) )
+{
+    $module = array_pop( $argv );
+    $_SERVER['argv'] = array_merge( $argv, $modules[$module] );
+}
+elseif ( count( $argv ) < 2 )
+{
+    $_SERVER['argv'] = array_merge( $argv, array( 'phcTestSuite', 'tests/suite.php' ) );
+}
+
+require __DIR__ . '/tests/runner/command.php';
+arbitTextUiCommand::main();
+

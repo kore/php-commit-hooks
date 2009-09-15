@@ -1,19 +1,19 @@
 <?php
 
-require './classes/runner.php';
+require __DIR__ . '/classes/runner.php';
 
-require './classes/reporter.php';
-require './classes/reporter/cli.php';
-require './classes/reporter/mail.php';
+require __DIR__ . '/classes/reporter.php';
+require __DIR__ . '/classes/reporter/cli.php';
+require __DIR__ . '/classes/reporter/mail.php';
 
-require './classes/check.php';
-require './classes/check/commit_message.php';
-require './classes/check/code_sniffer.php';
+require __DIR__ . '/classes/check.php';
+require __DIR__ . '/classes/check/commit_message.php';
+require __DIR__ . '/classes/check/code_sniffer.php';
 
-require './classes/issue.php';
+require __DIR__ . '/classes/issue.php';
 
-require './classes/repository.php';
-require './classes/repository/transaction.php';
-require './classes/repository/version.php';
+require __DIR__ . '/classes/repository.php';
+require __DIR__ . '/classes/repository/transaction.php';
+require __DIR__ . '/classes/repository/version.php';
 
 ?>
