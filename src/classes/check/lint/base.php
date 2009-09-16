@@ -33,53 +33,26 @@
  */
 
 /**
- * Struct class identifying the affected repository in a transaction (pre-commit)
+ * Check for valid files
+ *
+ * Implements linter checks for all added or modified files.
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchRepositoryTransaction extends pchRepository
+abstract class pchLintCheckImplementation
 {
     /**
-     * Currently affected transaction in the repository
-     * 
-     * @var string
-     */
-    public $transaction;
-
-    /**
-     * Construct from repository path, and transaction
-     * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return void
-     */
-    public function __construct( $repository, $transaction )
-    {
-        parent::__construct( $repository );
-        $this->transaction = (string) $transaction;
-    }
-
-    /**
-     * Svnlook command
+     * Lint file contents
      *
-     * Builds a svnlook command from the specified command, using the 
-     * parameters for the specified repository (type).
+     * If issues with the passed file are found the function will return an 
+     * array with the found issues, and an empty array otherwise.
      * 
-     * @param string $command
-     * @return pbsSystemProcess
+     * @param string $file 
+     * @param string $contents 
+     * @return array
      */
-    public function buildSvnLookCommand( $command )
-    {
-        $process = new pbsSystemProcess( '/usr/bin/env' );
-        $process
-            ->argument( 'svnlook' )
-            ->argument( '-t' )
-            ->argument( $this->transaction )
-            ->argument( $command )
-            ->argument( $this->path );
-        return $process;
-    }
+    abstract public function lint( $file, $contents );
 }
 

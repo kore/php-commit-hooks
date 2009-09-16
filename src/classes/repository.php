@@ -65,7 +65,8 @@ abstract class pchRepository
      * Builds a svnlook command from the specified command, using the 
      * parameters for the specified repository (type).
      * 
-     * @return string
+     * @param string $command
+     * @return pbsSystemProcess
      */
     abstract public function buildSvnLookCommand( $command );
 }

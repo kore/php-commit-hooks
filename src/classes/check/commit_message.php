@@ -445,8 +445,9 @@ class pchCommitMessageCheck extends pchCheck
      */
     public function validate( pchRepository $repository )
     {
-        $command = $repository->buildSvnLookCommand( 'log' );
-        return $this->parse( shell_exec( $command ) );
+        $process = $repository->buildSvnLookCommand( 'log' );
+        $process->execute();
+        return $this->parse( $process->stdoutOutput );
     }
 }
 

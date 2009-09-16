@@ -1,0 +1,34 @@
+PLAIN
+END
+ENDREP
+id: 0-2.0.r3/17
+type: dir
+pred: 0-2.0.r2/540
+count: 1
+text: 3 0 4 4 2d2977d1c96f487abe4a1e202dd03b4e
+cpath: /dir
+copyroot: 0 /
+
+PLAIN
+K 3
+dir
+V 15
+dir 0-2.0.r3/17
+K 9
+suite.php
+V 17
+file 0-1.0.r2/108
+END
+ENDREP
+id: 0.0.r3/228
+type: dir
+pred: 0.0.r2/738
+count: 3
+text: 3 145 70 70 30a29185480242b706f1b18c25b16102
+cpath: /
+copyroot: 0 /
+
+2-2.0.r2/297 delete-file false false /dir/errneous_file.php
+
+
+228 354

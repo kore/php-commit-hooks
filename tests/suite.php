@@ -41,6 +41,7 @@ require __DIR__ . '/test_environment.php';
  */
 require 'base_suite.php';
 require 'commit_message_suite.php';
+require 'lint_suite.php';
 
 /**
 * Test suite for Web Content Viewer
@@ -59,6 +60,7 @@ class pchTestSuite extends PHPUnit_Framework_TestSuite
 
         $this->addTestSuite( pchBaseTestSuite::suite() );
         $this->addTestSuite( pchCommitMessageTestSuite::suite() );
+        $this->addTestSuite( pchLintTestSuite::suite() );
     }
 
     /**

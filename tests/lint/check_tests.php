@@ -33,53 +33,60 @@
  */
 
 /**
- * Struct class identifying the affected repository in a transaction (pre-commit)
- * 
- * @package php-commit-hooks
- * @version $Revision$
- * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
+ * Tests for the commit message parser
  */
-class pchRepositoryTransaction extends pchRepository
+class pchLintCheckTests extends PHPUnit_Framework_TestCase
 {
     /**
-     * Currently affected transaction in the repository
-     * 
-     * @var string
+     * Return test suite
+     *
+     * @return PHPUnit_Framework_TestSuite
      */
-    public $transaction;
+	public static function suite()
+	{
+		return new PHPUnit_Framework_TestSuite( __CLASS__ );
+	}
 
-    /**
-     * Construct from repository path, and transaction
-     * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return void
-     */
-    public function __construct( $repository, $transaction )
+    public function testValidLints()
     {
-        parent::__construct( $repository );
-        $this->transaction = (string) $transaction;
+        $parser = new pchLintCheck();
+
+        $this->assertEquals(
+            array(),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 1 ) )
+        );
     }
 
-    /**
-     * Svnlook command
-     *
-     * Builds a svnlook command from the specified command, using the 
-     * parameters for the specified repository (type).
-     * 
-     * @param string $command
-     * @return pbsSystemProcess
-     */
-    public function buildSvnLookCommand( $command )
+    public function testInvalidLints()
     {
-        $process = new pbsSystemProcess( '/usr/bin/env' );
-        $process
-            ->argument( 'svnlook' )
-            ->argument( '-t' )
-            ->argument( $this->transaction )
-            ->argument( $command )
-            ->argument( $this->path );
-        return $process;
+        $parser = new pchLintCheck();
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_ERROR, 'dir/errneous_file.php', null, 'Parse error: syntax error, unexpected T_STRING in - on line 3' ),
+            ),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 2 ) )
+        );
+    }
+
+    public function testValidCustomLints()
+    {
+        $parser = new pchLintCheck( array() );
+
+        $this->assertEquals(
+            array(),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 2 ) )
+        );
+    }
+
+    public function testNoLints()
+    {
+        $parser = new pchLintCheck( array() );
+
+        $this->assertEquals(
+            array(),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 3 ) )
+        );
     }
 }
 

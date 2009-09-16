@@ -67,15 +67,19 @@ class pchRepositoryVersion extends pchRepository
      * Builds a svnlook command from the specified command, using the 
      * parameters for the specified repository (type).
      * 
-     * @return string
+     * @param string $command
+     * @return pbsSystemProcess
      */
     public function buildSvnLookCommand( $command )
     {
-        return sprintf( '/usr/bin/env svnlook -r %s %s %s',
-            escapeshellarg( $this->version ),
-            escapeshellarg( $command ),
-            escapeshellarg( $this->path )
-        );
+        $process = new pbsSystemProcess( '/usr/bin/env' );
+        $process
+            ->argument( 'svnlook' )
+            ->argument( '-r' )
+            ->argument( $this->version )
+            ->argument( $command )
+            ->argument( $this->path );
+        return $process;
     }
 }
 

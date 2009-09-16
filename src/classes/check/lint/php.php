@@ -33,53 +33,50 @@
  */
 
 /**
- * Struct class identifying the affected repository in a transaction (pre-commit)
+ * Check for valid files
+ *
+ * Implements linter checks for all added or modified files.
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchRepositoryTransaction extends pchRepository
+class pchPhpLintCheck extends pchLintCheckImplementation
 {
     /**
-     * Currently affected transaction in the repository
-     * 
-     * @var string
-     */
-    public $transaction;
-
-    /**
-     * Construct from repository path, and transaction
-     * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return void
-     */
-    public function __construct( $repository, $transaction )
-    {
-        parent::__construct( $repository );
-        $this->transaction = (string) $transaction;
-    }
-
-    /**
-     * Svnlook command
+     * Lint file contents
      *
-     * Builds a svnlook command from the specified command, using the 
-     * parameters for the specified repository (type).
+     * If issues with the passed file are found the function will return an 
+     * array with the found issues, and an empty array otherwise.
      * 
-     * @param string $command
-     * @return pbsSystemProcess
+     * @param string $file 
+     * @param string $contents 
+     * @return array
      */
-    public function buildSvnLookCommand( $command )
+    public function lint( $file, $contents )
     {
-        $process = new pbsSystemProcess( '/usr/bin/env' );
-        $process
-            ->argument( 'svnlook' )
-            ->argument( '-t' )
-            ->argument( $this->transaction )
-            ->argument( $command )
-            ->argument( $this->path );
-        return $process;
+        $check = new pbsSystemProcess( '/usr/bin/env' );
+        $check->argument( 'php' )->argument( '-l' );
+        
+        // Run process asynchronously to pipe file contents into it
+        $pipes = $check->execute( true );
+        fwrite( $pipes[0], $contents );
+        fclose( $pipes[0] );
+
+        $output = stream_get_contents( $pipes[1] );
+        $errors = stream_get_contents( $pipes[2] );
+        
+        if ( $check->close() )
+        {
+            // An error occured, transform return contents except for the last 
+            // line into an issue object
+            $message = implode( "\n", array_slice( preg_split( '(\r\n|\r|\n)', trim( $output ) ), 0, -1 ) );
+            return array(
+                new pchIssue( E_ERROR, $file, null, $message ),
+            );
+        }
+
+        return array();
     }
 }
 

@@ -32,54 +32,43 @@
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
 
-/**
- * Struct class identifying the affected repository in a transaction (pre-commit)
- * 
- * @package php-commit-hooks
- * @version $Revision$
- * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
- */
-class pchRepositoryTransaction extends pchRepository
+// Set up environment, if this test suite is run independant from the main test
+// suite.
+if ( !defined( 'PHC_STARTED' ) )
 {
-    /**
-     * Currently affected transaction in the repository
-     * 
-     * @var string
-     */
-    public $transaction;
-
-    /**
-     * Construct from repository path, and transaction
-     * 
-     * @param string $repository 
-     * @param string $transaction 
-     * @return void
-     */
-    public function __construct( $repository, $transaction )
-    {
-        parent::__construct( $repository );
-        $this->transaction = (string) $transaction;
-    }
-
-    /**
-     * Svnlook command
-     *
-     * Builds a svnlook command from the specified command, using the 
-     * parameters for the specified repository (type).
-     * 
-     * @param string $command
-     * @return pbsSystemProcess
-     */
-    public function buildSvnLookCommand( $command )
-    {
-        $process = new pbsSystemProcess( '/usr/bin/env' );
-        $process
-            ->argument( 'svnlook' )
-            ->argument( '-t' )
-            ->argument( $this->transaction )
-            ->argument( $command )
-            ->argument( $this->path );
-        return $process;
-    }
+    require __DIR__ . '/test_environment.php';
 }
 
+/**
+ * Commit message parser tests
+ */
+require 'lint/check_tests.php';
+
+/**
+ * Test suite for pch
+ */
+class pchLintTestSuite extends PHPUnit_Framework_TestSuite
+{
+    /**
+     * Basic constructor for test suite
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setName( 'php-commit-hooks - linter' );
+
+        $this->addTest( pchLintCheckTests::suite() );
+    }
+
+    /**
+     * Return test suite
+     * 
+     * @return PHPUnit_Framework_TestSuite
+     */
+    public static function suite()
+    {
+        return new pchLintTestSuite( __CLASS__ );
+    }
+}
