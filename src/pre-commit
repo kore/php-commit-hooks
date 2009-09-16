@@ -9,7 +9,7 @@
 require dirname( __FILE__ ) . '/environment.php';
 
 $runner = new pchRunner();
-// $runner->register( new pchLintCheck() );
+$runner->register( new pchLintCheck() );
 $runner->register( new pchCommitMessageCheck( array(
     'Refs'        => pchCommitMessageCheck::REQUIRED,
     'Fixed'       => pchCommitMessageCheck::REQUIRED,
