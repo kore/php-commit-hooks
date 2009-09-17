@@ -32,47 +32,41 @@
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
 
-// Set up environment, if this test suite is run independant from the main test
-// suite.
-require __DIR__ . '/test_environment.php';
-
-/*
- * Require test suites.
- */
-require 'base_suite.php';
-require 'commit_message_suite.php';
-require 'lint_suite.php';
-require 'svn_keywords_suite.php';
-
 /**
-* Test suite for Web Content Viewer
-*/
-class pchTestSuite extends PHPUnit_Framework_TestSuite
+ * Tests for the commit message parser
+ */
+class pchSvnKeywordsCheckTests extends PHPUnit_Framework_TestCase
 {
     /**
-     * Basic constructor for test suite
-     * 
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( 'php-commit-hooks' );
-
-        $this->addTestSuite( pchBaseTestSuite::suite() );
-        $this->addTestSuite( pchCommitMessageTestSuite::suite() );
-        $this->addTestSuite( pchLintTestSuite::suite() );
-        $this->addTestSuite( pchSvnKeywordsTestSuite::suite() );
-    }
-
-    /**
      * Return test suite
-     * 
+     *
      * @return PHPUnit_Framework_TestSuite
      */
-    public static function suite()
+	public static function suite()
+	{
+		return new PHPUnit_Framework_TestSuite( __CLASS__ );
+	}
+
+    public function testInvalidSvnKeywords()
     {
-        return new pchTestSuite( __CLASS__ );
+        $parser = new pchSvnKeywordsCheck();
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_WARNING, 'dir/errneous_file.php', null, 'Missing value \'Revision\' for property \'svn:keywords\'.' ),
+            ),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 2 ) )
+        );
+    }
+
+    public function testNoSvnKeywords()
+    {
+        $parser = new pchSvnKeywordsCheck( array() );
+
+        $this->assertEquals(
+            array(),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 3 ) )
+        );
     }
 }
 
