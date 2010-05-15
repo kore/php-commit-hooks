@@ -61,7 +61,7 @@ class pchCliReporter extends pchTextReporter
             exit( 0 );
         }
 
-        fwrite( STDOUT, $this->getTextReport( $issues ) );
+        fwrite( STDERR, $this->getTextReport( $issues ) );
         exit( 1 );
     }
 }
