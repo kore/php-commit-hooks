@@ -9,7 +9,7 @@
 require dirname( __FILE__ ) . '/environment.php';
 
 $runner = new pchRunner();
-$runner->register( new pchCodeSnifferCheck( 'arbit' ) );
+// $runner->register( new pchCodeSnifferCheck( 'arbit' ) );
 
 $runner->setReporter( new pchMailReporter(
     'postcommit@arbitracker.org', // Sender
