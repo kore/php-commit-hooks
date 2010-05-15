@@ -104,10 +104,34 @@ class pchMailReporter extends pchTextReporter
         }
 
         mail(
-            $this->receiver,
-            $this->subject,
+            $this->replacePlaceholders( $this->receiver ),
+            $this->replacePlaceholders( $this->subject ),
             $this->getTextReport( $issues ),
-            "From: {$this->sender}\r\n"
+            "From: " . $this->replacePlaceholders( $this->sender ) . "\r\n"
+        );
+    }
+
+    /**
+     * Replace placeholders in user provided strings
+     * 
+     * @param string $string 
+     * @param pchRepository $repository 
+     * @return string
+     */
+    protected function replacePlaceholders( $string, pchRepository $repository )
+    {
+        return str_replace(
+            array(
+                '{date}',
+                '{log}',
+                '{user}',
+            ),
+            array(
+                $repository->date,
+                $repository->log,
+                $repository->author,
+            ),
+            $string
         );
     }
 }

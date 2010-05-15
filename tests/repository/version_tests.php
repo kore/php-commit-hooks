@@ -55,5 +55,23 @@ class pchRepositoryVersionTests extends PHPUnit_Framework_TestCase
             $repo->author
         );
     }
+
+    public function testVersionDate()
+    {
+        $repo = new pchRepositoryVersion( __DIR__ . '/../data/', 1 );
+        $this->assertEquals(
+            '2009-09-15 20:03:23 +0200 (Tue, 15 Sep 2009)',
+            $repo->date
+        );
+    }
+
+    public function testVersionLog()
+    {
+        $repo = new pchRepositoryVersion( __DIR__ . '/../data/', 1 );
+        $this->assertEquals(
+            '- Added: A single test file to the test repository',
+            $repo->log
+        );
+    }
 }
 
