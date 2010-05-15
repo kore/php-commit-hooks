@@ -4,6 +4,7 @@
 require __DIR__ . '/classes/runner.php';
 
 require __DIR__ . '/classes/reporter.php';
+require __DIR__ . '/classes/reporter/text.php';
 require __DIR__ . '/classes/reporter/cli.php';
 require __DIR__ . '/classes/reporter/mail.php';
 
@@ -27,4 +28,3 @@ require __DIR__ . '/external/exceptions/system_process/invalidCustomFileDescript
 require __DIR__ . '/external/exceptions/system_process/notRunning.php';
 require __DIR__ . '/external/exceptions/system_process/recursivePipe.php';
 
-?>
