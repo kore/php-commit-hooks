@@ -33,81 +33,76 @@
  */
 
 /**
- * Mail reporter 
+ * Abstract base reporter for text based reporting output
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchMailReporter extends pchTextReporter
+abstract class pchTextReporter extends pchReporter
 {
     /**
-     * Sender of the mail
+     * Mapping of error codes to names
      * 
-     * @var string
+     * @var array
      */
-    protected $sender;
+    protected $mapping = array(
+        E_ERROR   => 'Error',
+        E_WARNING => 'Warning',
+        E_NOTICE  => 'Notice',
+        E_STRICT  => 'Strict error',
+    );
 
     /**
-     * Receiver of the mail
-     * 
-     * @var mixed
-     */
-    protected $receiver;
-
-    /**
-     * Subject of the mail
-     * 
-     * @var string
-     */
-    protected $subject;
-
-    /**
-     * Construct mail reporter
-     * 
-     * Construct the mail reporter from the sender of the mail, the receiver
-     * and subject.
+     * Get a text representation of the issues.
      *
-     * In all values simple values are replaced, like {user} is replaced by the
-     * SVN user name.
-     * 
-     * @param string $sender 
-     * @param string $receiver 
-     * @param string $subject 
-     * @return void
-     */
-    public function __construct( $sender, $receiver, $subject )
-    {
-        $this->sender   = $sender;
-        $this->receiver = $receiver;
-        $this->subject  = $subject;
-    }
-
-    /**
-     * Report occured issues
-     *
-     * Report occured issues, passed as an array to the command line. Will exit 
-     * with a non-zero exit code if any "errors" occured, and with a zero exit 
-     * code, of no issues occured.
-     *
-     * Will always abort script execution.
+     * Returns a text reporting all occured issues ordered by the files they 
+     * occured in.
      * 
      * @param array $issues
-     * @return void
+     * @return string
      */
-    public function report( array $issues ) 
+    protected function getTextReport( array $issues ) 
     {
-        if ( !count( $issues ) )
+        $return = '';
+
+        // Group issues by affected files
+        $files = array();
+        foreach ( $issues as $issue )
         {
-            return;
+            if ( isset( $files[$issue->file] ) )
+            {
+                $files[$issue->file][] = $issue;
+            }
+            else
+            {
+                $files[$issue->file] = array( $issue );
+            }
         }
 
-        mail(
-            $this->receiver,
-            $this->subject,
-            $this->getTextReport( $issues ),
-            "From: {$this->sender}\r\n"
-        );
+        // Output results to STDOUT
+        foreach ( $files as $file => $issues )
+        {
+            if ( $file )
+            {
+                $return .= sprintf( "%s\n%s\n\n",
+                    $file,
+                    str_repeat( '=', strlen( $file ) )
+                );
+            }
+
+            foreach ( $issues as $issue )
+            {
+                $return .= sprintf( "- %s: %s\n",
+                    $this->mapping[$issue->type],
+                    $issue->message
+                );
+            }
+
+            $return .= "\n";
+        }
+
+        return $return;
     }
 }
 

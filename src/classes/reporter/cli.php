@@ -39,20 +39,8 @@
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchCliReporter extends pchReporter
+class pchCliReporter extends pchTextReporter
 {
-    /**
-     * Mapping of error codes to names
-     * 
-     * @var array
-     */
-    protected $mapping = array(
-        E_ERROR   => 'Error',
-        E_WARNING => 'Warning',
-        E_NOTICE  => 'Notice',
-        E_STRICT  => 'Strict error',
-    );
-
     /**
      * Report occured issues
      *
@@ -72,42 +60,7 @@ class pchCliReporter extends pchReporter
             exit( 0 );
         }
 
-        // Group issues by affected files
-        $files = array();
-        foreach ( $issues as $issue )
-        {
-            if ( isset( $files[$issue->file] ) )
-            {
-                $files[$issue->file][] = $issue;
-            }
-            else
-            {
-                $files[$issue->file] = array( $issue );
-            }
-        }
-
-        // Output results to STDOUT
-        foreach ( $files as $file => $issues )
-        {
-            if ( $file )
-            {
-                fwrite( STDOUT, sprintf( "%s\n%s\n\n",
-                    $file,
-                    str_repeat( '=', strlen( $file ) )
-                ) );
-            }
-
-            foreach ( $issues as $issue )
-            {
-                fwrite( STDOUT, sprintf( "- %s: %s\n",
-                    $this->mapping[$issue->type],
-                    $issue->message
-                ) );
-            }
-
-            fwrite( STDOUT, "\n" );
-        }
-
+        fwrite( STDOUT, $this->getTextReport( $issues ) );
         exit( 1 );
     }
 }
