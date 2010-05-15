@@ -81,7 +81,7 @@ abstract class pchRepository
         $process = $this->buildSvnLookCommand( $property );
         $process->execute();
 
-        return $process->stdoutOutput;
+        return trim( $process->stdoutOutput );
     }
 }
 
