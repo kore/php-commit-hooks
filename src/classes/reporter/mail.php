@@ -100,7 +100,7 @@ class pchMailReporter extends pchTextReporter
     {
         if ( !count( $issues ) )
         {
-            return;
+            exit( 0 );
         }
 
         mail(
@@ -109,6 +109,8 @@ class pchMailReporter extends pchTextReporter
             $this->getTextReport( $issues ),
             "From: " . $this->replacePlaceholders( $this->sender ) . "\r\n"
         );
+
+        exit( 0 );
     }
 
     /**
