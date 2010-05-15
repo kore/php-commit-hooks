@@ -46,9 +46,10 @@ abstract class pchReporter
      *
      * Report occured issues, passed as an array.
      * 
-     * @param array $issues
+     * @param pchRepository $repository 
+     * @param array $issues 
      * @return void
      */
-    abstract public function report( array $issues );
+    abstract public function report( pchRepository $repository, array $issues );
 }
 

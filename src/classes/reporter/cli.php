@@ -50,10 +50,11 @@ class pchCliReporter extends pchTextReporter
      *
      * Will always abort script execution.
      * 
+     * @param pchRepository $repository 
      * @param array $issues
      * @return void
      */
-    public function report( array $issues ) 
+    public function report( pchRepository $repository, array $issues ) 
     {
         if ( !count( $issues ) )
         {

@@ -117,7 +117,7 @@ class pchRunner
             );
         }
 
-        $this->reporter->report( $issues );
+        $this->reporter->report( $repository, $issues );
     }
 }
 
