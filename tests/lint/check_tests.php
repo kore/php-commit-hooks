@@ -53,7 +53,7 @@ class pchLintCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 1 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 1 ) )
         );
     }
 
@@ -65,7 +65,7 @@ class pchLintCheckTests extends PHPUnit_Framework_TestCase
             array(
                 new pchIssue( E_ERROR, 'dir/errneous_file.php', null, "Parse error: syntax error, unexpected T_STRING in - on line 3\n" ),
             ),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 2 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 2 ) )
         );
     }
 
@@ -75,7 +75,7 @@ class pchLintCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 2 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 2 ) )
         );
     }
 
@@ -85,7 +85,7 @@ class pchLintCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 3 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 3 ) )
         );
     }
 }

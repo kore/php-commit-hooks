@@ -53,7 +53,7 @@ class pchCommitMessageCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 1 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 1 ) )
         );
 
         $this->assertEquals(
@@ -78,7 +78,7 @@ class pchCommitMessageCheckTests extends PHPUnit_Framework_TestCase
             array(
                 new pchIssue( E_ERROR, null, null, 'Invalid commit message: "- Added: A single test file to..."' ),
             ),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 1 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 1 ) )
         );
 
         $this->assertEquals(

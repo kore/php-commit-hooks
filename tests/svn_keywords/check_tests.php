@@ -55,7 +55,7 @@ class pchSvnKeywordsCheckTests extends PHPUnit_Framework_TestCase
             array(
                 new pchIssue( E_WARNING, 'dir/errneous_file.php', null, 'Missing value \'Revision\' for property \'svn:keywords\'.' ),
             ),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 2 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 2 ) )
         );
     }
 
@@ -65,7 +65,7 @@ class pchSvnKeywordsCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../repository/', 3 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 3 ) )
         );
     }
 }

@@ -69,5 +69,19 @@ abstract class pchRepository
      * @return pbsSystemProcess
      */
     abstract public function buildSvnLookCommand( $command );
+
+    /**
+     * Get a repository property using svnlook
+     * 
+     * @param string $property 
+     * @return void
+     */
+    public function __get( $property )
+    {
+        $process = $this->buildSvnLookCommand( $property );
+        $process->execute();
+
+        return $process->stdoutOutput;
+    }
 }
 
