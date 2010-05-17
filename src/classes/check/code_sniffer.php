@@ -87,22 +87,22 @@ class pchCodeSnifferCheck extends pchCheck
         {
             foreach ( $messages['errors'] as $errors )
             {
-                foreach ( $errors as $subErrors )
+                foreach ( $errors as $line => $lineErrors )
                 {
-                    foreach ( $subErrors as $error )
+                    foreach ( $lineErrors as $error )
                     {
-                        $issues[] = new pchIssue( E_ERROR, $file, null, $error['source'] . ': ' . $error['message'] );
+                        $issues[] = new pchIssue( E_ERROR, $file, $line, $error['source'] . ': ' . $error['message'] );
                     }
                 }
             }
 
             foreach ( $messages['warnings'] as $errors )
             {
-                foreach ( $errors as $subErrors )
+                foreach ( $errors as $line => $lineErrors )
                 {
-                    foreach ( $subErrors as $error )
+                    foreach ( $lineErrors as $error )
                     {
-                        $issues[] = new pchIssue( E_WARNING, $file, null, $error['source'] . ': ' . $error['message'] );
+                        $issues[] = new pchIssue( E_WARNING, $file, $line, $error['source'] . ': ' . $error['message'] );
                     }
                 }
             }

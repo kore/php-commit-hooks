@@ -53,7 +53,7 @@ class pchCodeSnifferCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(
-                new pchIssue( E_ERROR, 'cs_errors.php', null, 'PEAR.Classes.ClassDeclaration: Opening brace of a class must be on the line after the definition' ),
+                new pchIssue( E_ERROR, 'cs_errors.php', 12, 'PEAR.Classes.ClassDeclaration: Opening brace of a class must be on the line after the definition' ),
             ),
             $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 4 ) )
         );
