@@ -42,12 +42,12 @@ if ( !defined( 'PHC_STARTED' ) )
 /**
  * Commit message parser tests
  */
-require 'lint/check_tests.php';
+require 'check/lint_tests.php';
 
 /**
  * Test suite for pch
  */
-class pchLintTestSuite extends PHPUnit_Framework_TestSuite
+class pchCheckTestSuite extends PHPUnit_Framework_TestSuite
 {
     /**
      * Basic constructor for test suite
@@ -57,7 +57,7 @@ class pchLintTestSuite extends PHPUnit_Framework_TestSuite
     public function __construct()
     {
         parent::__construct();
-        $this->setName( 'php-commit-hooks - linter' );
+        $this->setName( 'php-commit-hooks - checks' );
 
         $this->addTest( pchLintCheckTests::suite() );
     }
@@ -69,6 +69,6 @@ class pchLintTestSuite extends PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        return new pchLintTestSuite( __CLASS__ );
+        return new pchCheckTestSuite( __CLASS__ );
     }
 }

@@ -41,7 +41,7 @@ require __DIR__ . '/test_environment.php';
  */
 require 'base_suite.php';
 require 'commit_message_suite.php';
-require 'lint_suite.php';
+require 'check_suite.php';
 require 'repository_suite.php';
 require 'svn_keywords_suite.php';
 
@@ -62,7 +62,7 @@ class pchTestSuite extends PHPUnit_Framework_TestSuite
 
         $this->addTestSuite( pchBaseTestSuite::suite() );
         $this->addTestSuite( pchCommitMessageTestSuite::suite() );
-        $this->addTestSuite( pchLintTestSuite::suite() );
+        $this->addTestSuite( pchCheckTestSuite::suite() );
         $this->addTestSuite( pchRepositoryTestSuite::suite() );
         $this->addTestSuite( pchSvnKeywordsTestSuite::suite() );
     }
