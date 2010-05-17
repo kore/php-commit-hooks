@@ -18,7 +18,7 @@ $runner->register( new pchSvnKeywordsCheck( array(
             'Revision',
         ),
     ),
-);
+) ) );
 
 $runner->register( new pchCommitMessageCheck( array(
     'Refs'        => pchCommitMessageCheck::REQUIRED,
