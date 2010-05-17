@@ -93,7 +93,8 @@ abstract class pchTextReporter extends pchReporter
 
             foreach ( $issues as $issue )
             {
-                $return .= sprintf( "- %s: %s\n",
+                $return .= sprintf( "- %s%s: %s\n",
+                    ( $issue->line === null ? '' : "Line {$issue->line}: " ),
                     $this->mapping[$issue->type],
                     $issue->message
                 );
