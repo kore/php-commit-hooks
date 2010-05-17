@@ -11,6 +11,7 @@ require __DIR__ . '/classes/reporter/cli.php';
 require __DIR__ . '/classes/reporter/mail.php';
 
 require __DIR__ . '/classes/check.php';
+require __DIR__ . '/classes/check/code_sniffer.php';
 require __DIR__ . '/classes/check/commit_message.php';
 require __DIR__ . '/classes/check/lint.php';
 require __DIR__ . '/classes/check/lint/base.php';

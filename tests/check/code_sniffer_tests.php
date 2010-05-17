@@ -32,45 +32,41 @@
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
 
-// Set up environment, if this test suite is run independant from the main test
-// suite.
-if ( !defined( 'PHC_STARTED' ) )
-{
-    require __DIR__ . '/test_environment.php';
-}
-
 /**
- * Commit message parser tests
+ * Tests for the commit message parser
  */
-require 'check/lint_tests.php';
-require 'check/code_sniffer_tests.php';
-
-/**
- * Test suite for pch
- */
-class pchCheckTestSuite extends PHPUnit_Framework_TestSuite
+class pchCodeSnifferCheckTests extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Basic constructor for test suite
-     * 
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( 'php-commit-hooks - checks' );
-
-        $this->addTest( pchLintCheckTests::suite() );
-        $this->addTest( pchCodeSnifferCheckTests::suite() );
-    }
-
     /**
      * Return test suite
-     * 
+     *
      * @return PHPUnit_Framework_TestSuite
      */
-    public static function suite()
+	public static function suite()
+	{
+		return new PHPUnit_Framework_TestSuite( __CLASS__ );
+	}
+
+    public function testValidLints()
     {
-        return new pchCheckTestSuite( __CLASS__ );
+        $parser = new pchCodeSnifferCheck( 'Arbit' );
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_ERROR, 'cs_errors.php', null, 'PEAR.Classes.ClassDeclaration: Opening brace of a class must be on the line after the definition' ),
+            ),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 4 ) )
+        );
+    }
+
+    public function testNoErrors()
+    {
+        $parser = new pchCodeSnifferCheck( 'Arbit' );
+
+        $this->assertEquals(
+            array(),
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 5 ) )
+        );
     }
 }
+
