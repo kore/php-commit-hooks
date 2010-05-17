@@ -9,7 +9,17 @@
 require dirname( __FILE__ ) . '/environment.php';
 
 $runner = new pchRunner();
+
 $runner->register( new pchLintCheck() );
+
+$runner->register( new pchSvnKeywordsCheck( array(
+    'php' => array(
+        'svn:keywords' => array(
+            'Revision',
+        ),
+    ),
+);
+
 $runner->register( new pchCommitMessageCheck( array(
     'Refs'        => pchCommitMessageCheck::REQUIRED,
     'Fixed'       => pchCommitMessageCheck::REQUIRED,
@@ -19,10 +29,8 @@ $runner->register( new pchCommitMessageCheck( array(
     'Tested'      => pchCommitMessageCheck::PROHIBITED,
     'Added'       => pchCommitMessageCheck::PROHIBITED,
 ) ) );
-// $runner->register( new pchCodeSnifferCheck() );
 
 $runner->setReporter( new pchCliReporter() );
 
 $runner->run( new pchRepositoryTransaction( $argv[1], $argv[2] ) );
 
-?>
