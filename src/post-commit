@@ -11,11 +11,14 @@ require dirname( __FILE__ ) . '/environment.php';
 $runner = new pchRunner();
 $runner->register( new pchCodeSnifferCheck( 'Arbit' ) );
 
-$runner->setReporter( new pchMailReporter(
-    'postcommit@example.org', // Sender
-    '{user}@example.org', // Receiver
-    'Coding style violations' // Mail topic
-) );
+$runner->setReporter( new pchReporterDispatcher( array(
+    new pchMailReporter(
+        'postcommit@example.org', // Sender
+        '{user}@example.org', // Receiver
+        'Coding style violations' // Mail topic
+    ),
+//    new pchKbotReporter( 'http://kbot.k023.de/commit.php', 'secret', 'My Project', '#project' ),
+) ) );
 
 $runner->run( new pchRepositoryVersion( $argv[1], $argv[2] ) );
 

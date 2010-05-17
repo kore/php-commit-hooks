@@ -33,71 +33,25 @@
  */
 
 /**
- * Reporter designed for a special k.Bot module to report commits to IRC
+ * Status code reporter
+ *
+ * Reporter telling SVN if an error occured or not using an exit status code. 
+ * Should always be the last reporter.
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchKbotReporter extends pchReporter
+class pchExitCodeReporter extends pchReporter
 {
-    /**
-     * URL the report will be passed to
-     * 
-     * @var string
-     */
-    protected $url;
-
-    /**
-     * Shared secret used to verify the senders autheticity
-     * 
-     * @var string
-     */
-    protected $secret;
-
-    /**
-     * Project name used in the report
-     * 
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * IRC-Channel to report to
-     * 
-     * @var string
-     */
-    protected $channel;
-
-    /**
-     * Number of the bot, which receives the command
-     * 
-     * @var int
-     */
-    protected $bot = 1;
-
-    /**
-     * Construct k.Bot reporter from shared secret
-     * 
-     * @param string $secret 
-     * @param string $name 
-     * @param string $channel 
-     * @param int $bot 
-     * @return void
-     */
-    public function __construct( $url, $secret, $name, $channel, $bot = 1 )
-    {
-        $this->url     = $url;
-        $this->secret  = $secret;
-        $this->name    = $name;
-        $this->channel = $channel;
-        $this->bot     = (int) $bot;
-    }
-
     /**
      * Report occured issues
      *
-     * Report occured issues, passed as an array.
+     * Report occured issues, passed as an array to the command line. Will exit 
+     * with a non-zero exit code if any "errors" occured, and with a zero exit 
+     * code, of no issues occured.
+     *
+     * Will always abort script execution.
      * 
      * @param pchRepository $repository 
      * @param array $issues
@@ -105,26 +59,7 @@ class pchKbotReporter extends pchReporter
      */
     public function report( pchRepository $repository, array $issues ) 
     {
-        // Configure who should receive this notification
-        $commit['bot']        = $this->bot;
-
-        // Basic repository information
-        $commit['repository'] = $repository->path;
-        $commit['revision']   = $repository->version;
-        $commit['project']    = $this->name;
-        $commit['channel']    = $this->channel;
-
-        // Get more info from repository using svnlook
-        $commit['author']     = $repository->author;
-        $commit['date']       = $repository->date;
-        $commit['log']        = $repository->log;
-        $commit['dirs']       = substr( $repository->{'dirs-changed'}, 0, 80 );
-
-        // Build checksum for primitive authentification of request
-        $commit['checksum']   = md5( $this->secret . '-' . implode( '_', $commit ) );
-
-        // Send data over the wire
-        file_get_contents( $this->url . '?' . http_build_query( $commit ) );
+        exit( (int) (bool) count( $issues ) );
     }
 }
 

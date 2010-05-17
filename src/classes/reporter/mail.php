@@ -86,11 +86,7 @@ class pchMailReporter extends pchTextReporter
     /**
      * Report occured issues
      *
-     * Report occured issues, passed as an array to the command line. Will exit 
-     * with a non-zero exit code if any "errors" occured, and with a zero exit 
-     * code, of no issues occured.
-     *
-     * Will always abort script execution.
+     * Report occured issues, passed as an array.
      * 
      * @param pchRepository $repository 
      * @param array $issues
@@ -100,7 +96,7 @@ class pchMailReporter extends pchTextReporter
     {
         if ( !count( $issues ) )
         {
-            exit( 0 );
+            return;
         }
 
         mail(
@@ -112,8 +108,6 @@ class pchMailReporter extends pchTextReporter
             $this->getTextReport( $issues ),
             "From: " . $this->replacePlaceholders( $this->sender, $repository ) . "\r\n"
         );
-
-        exit( 0 );
     }
 
     /**

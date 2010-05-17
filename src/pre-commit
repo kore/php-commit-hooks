@@ -30,7 +30,10 @@ $runner->register( new pchCommitMessageCheck( array(
     'Added'       => pchCommitMessageCheck::PROHIBITED,
 ) ) );
 
-$runner->setReporter( new pchCliReporter() );
+$runner->setReporter( new pchReporterDispatcher( array(
+    new pchCliReporter(),
+    new pchExitCodeReporter(),
+) ) );
 
 $runner->run( new pchRepositoryTransaction( $argv[1], $argv[2] ) );
 
