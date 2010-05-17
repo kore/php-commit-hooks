@@ -51,5 +51,56 @@ abstract class pchCheck
      * @return void
      */
     abstract public function validate( pchRepository $repository );
+
+    /**
+     * Returns an array of chanegd files
+     *
+     * Returns an array with the names of all files wich have been changed in 
+     * the specified transaction / revision.
+     * 
+     * @param pchRepository $repository 
+     * @return array
+     */
+    protected function getChangedFiles( pchRepository $repository )
+    {
+        $process = $repository->buildSvnLookCommand( 'changed' );
+        $process->execute();
+
+        $files   = preg_split( '(\r\n|\r|\n)', trim( $process->stdoutOutput ) );
+
+        $filtered = array();
+        foreach ( $files as $file )
+        {
+            if ( !preg_match( '(^[AM]\s+(?P<filename>.*)$)', $file, $match ) )
+            {
+                continue;
+            }
+
+            $filtered[] = $match['filename'];
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * Get file contents as stream
+     *
+     * Return the contents of the specified file as a PHP stream
+     * 
+     * @param pchRepository $repository 
+     * @param string $file 
+     * @return resource
+     */
+    protected function getFileContents( pchRepository $repository, $file )
+    {
+        $fileContents = $repository->buildSvnLookCommand( 'cat' );
+        $fileContents->argument( $file );
+        $fileContents->execute();
+
+        $stream = fopen( 'string://', 'w' );
+        fwrite( $stream, $fileContents->stdoutOutput );
+        fseek( $stream, 0 );
+        return $stream;
+    }
 }
 

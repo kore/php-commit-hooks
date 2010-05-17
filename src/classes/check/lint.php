@@ -85,11 +85,7 @@ class pchLintCheck extends pchCheck
         $type = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
         if ( isset( $this->linters[$type] ) )
         {
-            $fileContents = $repository->buildSvnLookCommand( 'cat' );
-            $fileContents->argument( $file );
-            $fileContents->execute();
-
-            return $this->linters[$type]->lint( $file, $fileContents->stdoutOutput );
+            return $this->linters[$type]->lint( $file, $this->getFileContents( $repository, $file ) );
         }
 
         return array();
@@ -106,21 +102,12 @@ class pchLintCheck extends pchCheck
      */
     public function validate( pchRepository $repository )
     {
-        $process = $repository->buildSvnLookCommand( 'changed' );
-        $process->execute();
-        $files   = preg_split( '(\r\n|\r|\n)', trim( $process->stdoutOutput ) );
-
         $issues = array();
-        foreach ( $files as $file )
+        foreach ( $this->getChangedFiles( $repository ) as $file )
         {
-            if ( !preg_match( '(^[AM]\s+(?P<filename>.*)$)', $file, $match ) )
-            {
-                continue;
-            }
-
             $issues = array_merge(
                 $issues,
-                $this->lint( $repository, $match['filename'] )
+                $this->lint( $repository, $file )
             );
         }
 

@@ -60,7 +60,7 @@ class pchPhpLintCheck extends pchLintCheckImplementation
         
         // Run process asynchronously to pipe file contents into it
         $pipes = $check->execute( true );
-        fwrite( $pipes[0], $contents );
+        fwrite( $pipes[0], stream_get_contents( $contents ) );
         fclose( $pipes[0] );
 
         $output = stream_get_contents( $pipes[1] );
