@@ -97,7 +97,12 @@ abstract class pchCheck
         $fileContents->argument( $file );
         $fileContents->execute();
 
-        $stream = fopen( 'string://', 'w' );
+        if ( !in_array( 'pchString', stream_get_wrappers() ) )
+        {
+            stream_wrapper_register( 'pchString', 'pchStringStream' );
+        }
+
+        $stream = fopen( 'pchString://', 'w' );
         fwrite( $stream, $fileContents->stdoutOutput );
         fseek( $stream, 0 );
         return $stream;
