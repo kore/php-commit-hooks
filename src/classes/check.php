@@ -71,7 +71,7 @@ abstract class pchCheck
         $filtered = array();
         foreach ( $files as $file )
         {
-            if ( !preg_match( '(^[AM]\s+(?P<filename>.*)$)', $file, $match ) )
+            if ( !preg_match( '(^[AMU]\s+(?P<filename>.*)$)', $file, $match ) )
             {
                 continue;
             }
