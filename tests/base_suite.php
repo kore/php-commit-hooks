@@ -43,6 +43,7 @@ if ( !defined( 'PHC_STARTED' ) )
  * Commit message parser tests
  */
 require 'base/runner_tests.php';
+require 'base/string_stream_test.php';
 
 /**
  * Test suite for pch
@@ -60,6 +61,7 @@ class pchBaseTestSuite extends PHPUnit_Framework_TestSuite
         $this->setName( 'php-commit-hooks - base tests' );
 
         $this->addTest( pchBaseRunnerTests::suite() );
+        $this->addTest( pchBaseStringStreamTests::suite() );
     }
 
     /**

@@ -3,6 +3,8 @@
 // Core classes
 require __DIR__ . '/classes/runner.php';
 
+require __DIR__ . '/classes/string_stream.php';
+
 require __DIR__ . '/classes/reporter.php';
 require __DIR__ . '/classes/reporter/text.php';
 require __DIR__ . '/classes/reporter/cli.php';
