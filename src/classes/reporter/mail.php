@@ -104,10 +104,10 @@ class pchMailReporter extends pchTextReporter
         }
 
         mail(
-            $this->replacePlaceholders( $this->receiver ),
-            $this->replacePlaceholders( $this->subject ),
+            $this->replacePlaceholders( $this->receiver, $repository ),
+            $this->replacePlaceholders( $this->subject, $repository ),
             $this->getTextReport( $issues ),
-            "From: " . $this->replacePlaceholders( $this->sender ) . "\r\n"
+            "From: " . $this->replacePlaceholders( $this->sender, $repository ) . "\r\n"
         );
 
         exit( 0 );
