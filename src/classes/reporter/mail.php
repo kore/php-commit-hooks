@@ -106,6 +106,9 @@ class pchMailReporter extends pchTextReporter
         mail(
             $this->replacePlaceholders( $this->receiver, $repository ),
             $this->replacePlaceholders( $this->subject, $repository ),
+            "Author:   {$repository->user}\n" . 
+            "Revision: {$repository->version} ({$repository->date})\n" . 
+            "Comment:\n\n{$repository->log}\n\n" . 
             $this->getTextReport( $issues ),
             "From: " . $this->replacePlaceholders( $this->sender, $repository ) . "\r\n"
         );
