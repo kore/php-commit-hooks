@@ -33,35 +33,65 @@
  */
 
 /**
- * Reporter dispatcher
- *
- * Dispatches the report to any number of other reporters
+ * Reporter designed for a special k.Bot module to report commits to IRC
  * 
  * @package php-commit-hooks
  * @version $Revision$
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-class pchReporterDispatcher extends pchReporter
+class pchKbotReporter extends pchReporter
 {
     /**
-     * List of reporters to dispatch to.
+     * URL the report will be passed to
      * 
-     * @var array
+     * @var string
      */
-    protected $reporters;
+    protected $url;
 
     /**
-     * Construct reporter dispatcher
-     *
-     * Construct dispatcher from an array with any number of "child" reporters, 
-     * which will then be called with the reporting results.
-     *
-     * @param array $reporters 
+     * Shared secret used to verify the senders autheticity
+     * 
+     * @var string
+     */
+    protected $secret;
+
+    /**
+     * Project name used in the report
+     * 
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * IRC-Channel to report to
+     * 
+     * @var string
+     */
+    protected $channel;
+
+    /**
+     * Number of the bot, which receives the command
+     * 
+     * @var int
+     */
+    protected $bot = 1;
+
+    /**
+     * Construct k.Bot reporter from shared secret
+     * 
+     * @param string $secret 
+     * @param string $name 
+     * @param string $channel 
+     * @param int $bot 
      * @return void
      */
-    public function __construct( array $reporters )
+    public function __construct( $url, $secret, $name, $channel, $bot = 1 )
     {
-        $this->reporters = $reporters;
+        $this->url     = $url;
+        $this->secret  = $secret;
+        $this->name    = $name;
+        $this->channel = $channel;
+        $this->bot     = (int) $bot;
     }
 
     /**
@@ -79,10 +109,26 @@ class pchReporterDispatcher extends pchReporter
      */
     public function report( pchRepository $repository, array $issues ) 
     {
-        foreach ( $this->reporters as $reporter )
-        {
-            $reporter->report( $repository, $issues );
-        }
+        // Configure who should receive this notification
+        $commit['bot']        = $this->bot;
+
+        // Basic repository information
+        $commit['repository'] = $repository->path;
+        $commit['revision']   = $repository->version;
+        $commit['project']    = $this->name;
+        $commit['channel']    = $this->channel;
+
+        // Get more info from repository using svnlook
+        $commit['author']     = $repository->author;
+        $commit['date']       = $repository->date;
+        $commit['log']        = $repository->log;
+        $commit['dirs']       = substr( $repository->{'dirs-changed'}, 0, 80 );
+
+        // Build checksum for primitive authentification of request
+        $commit['checksum']   = md5( $this->secret . '-' . implode( '_', $commit ) );
+
+        // Send data over the wire
+        file_get_contents( $this->url . '?' . http_build_query( $commit ) );
     }
 }
 
