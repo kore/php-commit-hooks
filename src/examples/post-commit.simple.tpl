@@ -6,7 +6,7 @@
  * committed.
  */
 
-require dirname( __FILE__ ) . '/environment.php';
+require dirname( __FILE__ ) . '/../environment.php';
 
 $runner = new pchRunner();
 $runner->register( new pchCodeSnifferCheck( 'Arbit' ) );

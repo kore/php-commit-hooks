@@ -6,7 +6,7 @@
  * the CLI, so the report will end in the users SVN client.
  */
 
-require dirname( __FILE__ ) . '/environment.php';
+require dirname( __FILE__ ) . '/../environment.php';
 
 $runner = new pchRunner();
 
