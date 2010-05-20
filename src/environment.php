@@ -12,6 +12,7 @@ require __DIR__ . '/classes/reporter/text.php';
 require __DIR__ . '/classes/reporter/cli.php';
 require __DIR__ . '/classes/reporter/mail.php';
 require __DIR__ . '/classes/reporter/kbot.php';
+require __DIR__ . '/classes/reporter/commit_mail.php';
 
 require __DIR__ . '/classes/check.php';
 require __DIR__ . '/classes/check/code_sniffer.php';

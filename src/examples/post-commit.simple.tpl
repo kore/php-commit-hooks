@@ -17,6 +17,7 @@ $runner->setReporter( new pchReporterDispatcher( array(
         '{user}@example.org', // Receiver
         'Coding style violations' // Mail topic
     ),
+    new pchCommitMailReporter( 'svn@example.org', 'list@example.org', '[SVN]' ),
 //    new pchKbotReporter( 'http://kbot.k023.de/commit.php', 'secret', 'My Project', '#project' ),
 ) ) );
 
