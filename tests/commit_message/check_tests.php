@@ -86,5 +86,56 @@ class pchCommitMessageCheckTests extends PHPUnit_Framework_TestCase
             $parser->getResult()
         );
     }
+
+    public function testGeneratedEBNF()
+    {
+        $parser = new pchCommitMessageCheck();
+
+        $expectation = <<<'EOEBNF'
+Message       ::= Statement+ | Statement* Comment+
+Statement     ::= Refs | Fixed | Closed | Implemented | Documented | Tested | Translated | Added
+Comment       ::= '# ' TextLine | '#\n'
+
+Refs          ::= '- Refs'         BugNr  ': ' TextLine Text?
+Fixed         ::= '- Fixed'        BugNr  ': ' TextLine Text?
+Closed        ::= '- Closed'       BugNr  ': ' TextLine Text?
+Implemented   ::= '- Implemented'  BugNr? ': ' TextLine Text?
+Documented    ::= '- Documented'   BugNr? ': ' TextLine Text?
+Tested        ::= '- Tested'              ': ' TextLine Text?
+Translated    ::= '- Translated'          ': ' TextLine Text?
+Added         ::= '- Added'               ': ' TextLine Text?
+
+Text          ::= '  ' TextLine Text?
+BugNr         ::= ' #' [1-9]+[0-9]*
+TextLine      ::= [\x20-\x7E]+ "\n"
+
+EOEBNF;
+        $this->assertEquals( $expectation, $parser->getEBNF() );
+    }
+
+    public function testGeneratedCustomEBNF()
+    {
+        $parser = new pchCommitMessageCheck( array(
+            'Done'   => pchCommitMessageCheck::REQUIRED,
+            'Tested' => pchCommitMessageCheck::OPTIONAL,
+            'Fixed'  => pchCommitMessageCheck::PROHIBITED,
+        ) );
+
+        $expectation = <<<'EOEBNF'
+Message       ::= Statement+ | Statement* Comment+
+Statement     ::= Done | Tested | Fixed
+Comment       ::= '# ' TextLine | '#\n'
+
+Done          ::= '- Done'         BugNr  ': ' TextLine Text?
+Tested        ::= '- Tested'       BugNr? ': ' TextLine Text?
+Fixed         ::= '- Fixed'               ': ' TextLine Text?
+
+Text          ::= '  ' TextLine Text?
+BugNr         ::= ' #' [1-9]+[0-9]*
+TextLine      ::= [\x20-\x7E]+ "\n"
+
+EOEBNF;
+        $this->assertEquals( $expectation, $parser->getEBNF() );
+    }
 }
 

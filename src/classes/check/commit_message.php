@@ -435,6 +435,43 @@ class pchCommitMessageCheck extends pchCheck
     }
 
     /**
+     * Return a string representation of the implemented EBNF
+     *
+     * Returns a string representation of the EBNF, based on the configured 
+     * rules and the default settings, like the commit message length.
+     * 
+     * @return string
+     */
+    public function getEBNF()
+    {
+        $ebnf  = "";
+        $ebnf .= "Message       ::= Statement+ | Statement* Comment+\n";
+        $ebnf .= "Statement     ::= " . implode( " | ", array_keys( $this->rules ) )  . "\n";
+        $ebnf .= "Comment       ::= '# ' TextLine | '#\\n'\n";
+        $ebnf .= "\n";
+
+        foreach ( $this->rules as $name => $type )
+        {
+            $ebnf .= sprintf( "%s%s ::= '- %s'%s%s ': ' TextLine Text?\n",
+                $name,
+                $ws = str_repeat( ' ', max( 0, 13 - strlen( $name ) ) ),
+                $name,
+                $ws,
+                ( $type === self::REQUIRED ? 'BugNr ' :
+                    ( $type === self::OPTIONAL ? 'BugNr?' : '      ' )
+                )
+            );
+        }
+
+        $ebnf .= "\n";
+        $ebnf .= "Text          ::= '  ' TextLine Text?\n";
+        $ebnf .= "BugNr         ::= ' #' [1-9]+[0-9]*\n";
+        $ebnf .= "TextLine      ::= [\\x20-\\x7E]+ \"\\n\"\n";
+
+        return $ebnf;
+    }
+
+    /**
      * Validate the current check
      *
      * Validate the check on the specified repository. Returns an array of 
