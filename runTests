@@ -17,6 +17,6 @@ elseif ( count( $argv ) < 2 )
     $_SERVER['argv'] = array_merge( $argv, array( 'phcTestSuite', 'tests/suite.php' ) );
 }
 
-require __DIR__ . '/tests/runner/command.php';
+require __DIR__ . '/tests/runner/src/command.php';
 arbitTextUiCommand::main();
 
