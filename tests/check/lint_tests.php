@@ -63,7 +63,7 @@ class pchLintCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(
-                new pchIssue( E_ERROR, 'dir/errneous_file.php', null, "Parse error: syntax error, unexpected T_STRING in - on line 3\n" ),
+                new pchIssue( E_ERROR, 'dir/errneous_file.php', null, "Parse error: syntax error, unexpected T_STRING in - on line 3" ),
             ),
             $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 2 ) )
         );
