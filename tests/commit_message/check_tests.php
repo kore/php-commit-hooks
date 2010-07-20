@@ -73,10 +73,26 @@ class pchCommitMessageCheckTests extends PHPUnit_Framework_TestCase
         $parser = new pchCommitMessageCheck( array(
             'Done'   => pchCommitMessageCheck::REQUIRED,
         ) );
+        $error = <<<'EOERROR'
+Invalid commit message: "- Added: A single test file to..."
+
+Allowed are messages following this grammar:
+
+Message       ::= Statement+ | Statement* Comment+
+Statement     ::= Done
+Comment       ::= '# ' TextLine | '#\n'
+
+Done          ::= '- Done'         BugNr  ': ' TextLine Text?
+
+Text          ::= '  ' TextLine Text?
+BugNr         ::= ' #' [1-9]+[0-9]*
+TextLine      ::= [\x20-\x7E]+ "\n"
+
+EOERROR;
 
         $this->assertEquals(
             array(
-                new pchIssue( E_ERROR, null, null, 'Invalid commit message: "- Added: A single test file to..."' ),
+                new pchIssue( E_ERROR, null, null, $error )
             ),
             $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 1 ) )
         );

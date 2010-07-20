@@ -203,12 +203,73 @@ class pchCommitMessageParserTests extends PHPUnit_Framework_TestCase
 
     public function testBrokenComment()
     {
-        $parser = new pchCommitMessageCheck();
+        $parser = new pchCommitMessageCheck( array(
+            'Done'   => pchCommitMessageCheck::REQUIRED,
+            'Tested' => pchCommitMessageCheck::OPTIONAL,
+            'Fixed'  => pchCommitMessageCheck::PROHIBITED,
+        ) );
+
+        $error = <<<'EOERROR'
+Invalid commit message: "#Foo..."
+
+Allowed are messages following this grammar:
+
+Message       ::= Statement+ | Statement* Comment+
+Statement     ::= Done | Tested | Fixed
+Comment       ::= '# ' TextLine | '#\n'
+
+Done          ::= '- Done'         BugNr  ': ' TextLine Text?
+Tested        ::= '- Tested'       BugNr? ': ' TextLine Text?
+Fixed         ::= '- Fixed'               ': ' TextLine Text?
+
+Text          ::= '  ' TextLine Text?
+BugNr         ::= ' #' [1-9]+[0-9]*
+TextLine      ::= [\x20-\x7E]+ "\n"
+
+EOERROR;
+
         $this->assertEquals(
             array(
-                new pchIssue( E_ERROR, null, null, 'Invalid commit message: "#Foo..."' )
+                new pchIssue( E_ERROR, null, null, $error )
             ),
             $parser->parse( '#Foo' )
+        );
+
+        $this->assertSame( null, $parser->getResult() );
+    }
+
+    public function testUnknownLiteral()
+    {
+        $parser = new pchCommitMessageCheck( array(
+            'Done'   => pchCommitMessageCheck::REQUIRED,
+            'Tested' => pchCommitMessageCheck::OPTIONAL,
+            'Fixed'  => pchCommitMessageCheck::PROHIBITED,
+        ) );
+
+        $error = <<<'EOERROR'
+Invalid commit message: "- Unknown: Literal..."
+
+Allowed are messages following this grammar:
+
+Message       ::= Statement+ | Statement* Comment+
+Statement     ::= Done | Tested | Fixed
+Comment       ::= '# ' TextLine | '#\n'
+
+Done          ::= '- Done'         BugNr  ': ' TextLine Text?
+Tested        ::= '- Tested'       BugNr? ': ' TextLine Text?
+Fixed         ::= '- Fixed'               ': ' TextLine Text?
+
+Text          ::= '  ' TextLine Text?
+BugNr         ::= ' #' [1-9]+[0-9]*
+TextLine      ::= [\x20-\x7E]+ "\n"
+
+EOERROR;
+
+        $this->assertEquals(
+            array(
+                new pchIssue( E_ERROR, null, null, $error )
+            ),
+            $parser->parse( '- Unknown: Literal' )
         );
 
         $this->assertSame( null, $parser->getResult() );

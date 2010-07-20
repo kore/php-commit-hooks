@@ -409,7 +409,7 @@ class pchCommitMessageCheck extends pchCheck
             else
             {
                 return array(
-                    new pchIssue( E_ERROR, null, null, "Invalid commit message: $echodLine" ),
+                    new pchIssue( E_ERROR, null, null, "Invalid commit message: $echodLine\n\nAllowed are messages following this grammar:\n\n" . $this->getEBNF() ),
                 );
             }
         }
