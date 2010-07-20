@@ -11,7 +11,7 @@ The design of PCH is quite simple and is structured into two main entities:
 - Checks
 
   Implements checks, for example verifying the commit message, or if the
-      committed files are valid.
+  committed files are valid.
 
 - Reporters
 
