@@ -30,6 +30,10 @@ require __DIR__ . '/classes/repository/version.php';
 
 // Externals: System Process
 require __DIR__ . '/external/system_process/systemProcess.php';
+require __DIR__ . '/external/system_process/argument.php';
+require __DIR__ . '/external/system_process/argument/escaped.php';
+require __DIR__ . '/external/system_process/argument/path.php';
+require __DIR__ . '/external/system_process/argument/unescaped.php';
 require __DIR__ . '/external/exceptions/system_process/nonZeroExitCode.php';
 require __DIR__ . '/external/exceptions/system_process/invalidCustomFileDescriptor.php';
 require __DIR__ . '/external/exceptions/system_process/notRunning.php';
