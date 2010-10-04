@@ -20,6 +20,7 @@ require __DIR__ . '/classes/check/commit_message.php';
 require __DIR__ . '/classes/check/lint.php';
 require __DIR__ . '/classes/check/lint/base.php';
 require __DIR__ . '/classes/check/lint/php.php';
+require __DIR__ . '/classes/check/lint/sieve.php';
 require __DIR__ . '/classes/check/svn_keywords.php';
 
 require __DIR__ . '/classes/issue.php';

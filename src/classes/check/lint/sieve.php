@@ -32,47 +32,58 @@
  * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
 
-// Set up environment, if this test suite is run independant from the main test
-// suite.
-if ( !defined( 'PHC_STARTED' ) )
-{
-    require __DIR__ . '/test_environment.php';
-}
-
 /**
- * Commit message parser tests
+ * Check for valid files
+ *
+ * Implements linter checks for all added or modified files.
+ * 
+ * @package php-commit-hooks
+ * @version $Revision$
+ * @license http://www.opensource.org/licenses/bsd-license.html New BSD license
  */
-require 'check/lint_tests.php';
-require 'check/sieve_lint_tests.php';
-require 'check/code_sniffer_tests.php';
-
-/**
- * Test suite for pch
- */
-class pchCheckTestSuite extends PHPUnit_Framework_TestSuite
+class pchSieveLintCheck extends pchLintCheckImplementation
 {
     /**
-     * Basic constructor for test suite
+     * Lint file contents
+     *
+     * If issues with the passed file are found the function will return an 
+     * array with the found issues, and an empty array otherwise.
      * 
-     * @return void
+     * @param string $file 
+     * @param string $contents 
+     * @return array
      */
-    public function __construct()
+    public function lint( $file, $contents )
     {
-        parent::__construct();
-        $this->setName( 'php-commit-hooks - checks' );
+        $check = new pbsSystemProcess( '/usr/bin/env' );
+        $check->argument( 'sievec' );
+        
+        // Write contents into temporary file, since sievec is not able to read 
+        // from STDIN
+        $tempFileName = tempnam( sys_get_temp_dir(), 'sieve' );
+        file_put_contents( $tempFileName, stream_get_contents( $contents ) );
 
-        $this->addTest( pchLintCheckTests::suite() );
-        $this->addTest( pchSieveLintCheckTests::suite() );
-        $this->addTest( pchCodeSnifferCheckTests::suite() );
-    }
+        $check->argument( $tempFileName );
+        $check->execute();
+        unlink( $tempFileName );
 
-    /**
-     * Return test suite
-     * 
-     * @return PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new pchCheckTestSuite( __CLASS__ );
+        if ( $check->stderrOutput !== '' )
+        {
+            $message = str_replace(
+                array(
+                    $tempFileName,
+                    basename( $tempFileName ),
+                ),
+                array( $file, $file ),
+                $check->stderrOutput
+            );
+
+            return array(
+                new pchIssue( E_ERROR, $file, null, $message ),
+            );
+        }
+
+        return array();
     }
 }
+
