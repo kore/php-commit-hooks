@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This is an example for a common post commit configuration. It registers a
+ * single check, the code sniffer check, and sends the report to the user, who
+ * committed.
+ */
+
+require dirname( __FILE__ ) . '/../environment.php';
+
+$runner = new pchRunner();
+
+# Extract project name
+$project = basename( $argv[1] );
+
+// Register reporter for IRC channels and ML
+$reporter = array(
+    new pchKbotReporter( 'http://kbot.k023.de/commit.php', 'checksum', $project, '#ternary', 1 ),
+    new pchCommitMailReporter( '{user}@qafoo.com', 'internal@lists.qafoo.com', "[SVN] [$project]" ),
+);
+
+$runner->setReporter( new pchReporterDispatcher( $reporter ) );
+$runner->run( new pchRepositoryVersion( $argv[1], $argv[2] ) );
+
