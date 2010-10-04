@@ -49,7 +49,7 @@ class pchRepositoryVersionTests extends PHPUnit_Framework_TestCase
 
     public function testVersionAuthor()
     {
-        $repo = new pchRepositoryVersion( __DIR__ . '/../data/', 1 );
+        $repo = new pchRepositoryVersion( __DIR__ . '/../data/repo/', 1 );
         $this->assertEquals(
             'kore',
             $repo->author
@@ -58,7 +58,7 @@ class pchRepositoryVersionTests extends PHPUnit_Framework_TestCase
 
     public function testVersionDate()
     {
-        $repo = new pchRepositoryVersion( __DIR__ . '/../data/', 1 );
+        $repo = new pchRepositoryVersion( __DIR__ . '/../data/repo/', 1 );
         $this->assertEquals(
             '2009-09-15 20:03:23 +0200 (Tue, 15 Sep 2009)',
             $repo->date
@@ -67,7 +67,7 @@ class pchRepositoryVersionTests extends PHPUnit_Framework_TestCase
 
     public function testVersionLog()
     {
-        $repo = new pchRepositoryVersion( __DIR__ . '/../data/', 1 );
+        $repo = new pchRepositoryVersion( __DIR__ . '/../data/repo/', 1 );
         $this->assertEquals(
             '- Added: A single test file to the test repository',
             $repo->log

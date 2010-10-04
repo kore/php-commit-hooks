@@ -53,7 +53,7 @@ class pchCommitMessageCheckTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 1 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/repo/', 1 ) )
         );
 
         $this->assertEquals(
@@ -94,7 +94,7 @@ EOERROR;
             array(
                 new pchIssue( E_ERROR, null, null, $error )
             ),
-            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/', 1 ) )
+            $parser->validate( new pchRepositoryVersion( __DIR__ . '/../data/repo/', 1 ) )
         );
 
         $this->assertEquals(
